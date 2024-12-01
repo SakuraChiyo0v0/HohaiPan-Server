@@ -1,7 +1,4 @@
-package com.hhu.service;
+package com.hhu.Service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.hhu.hhu.entity.User;
-
-public interface IUserService extends IService<User> {
+public interface IUserService {
 }
