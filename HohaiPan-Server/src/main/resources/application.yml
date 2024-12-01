@@ -45,3 +45,81 @@ spring:
           max-active: 8
           # #连接池最大阻塞等待时间（使用负值表示没有限制）
           max-wait: -1ms
+  mail:
+    username: 1203521235@qq.com
+    password: refpzvsjybfmibii #邮箱的登录密码 非授权码
+    host: smtp.qq.com
+    port: 587
+    default-encoding: UTF-8
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          starttls:
+            required: true
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
+
+
+# MyBatis-plus配置
+mybatis-plus:
+  #MyBatis Mapper 对应的 XML 文件位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 搜索指定包别名
+  type-aliases-package: com.hhu.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type:  assign_id
+      update-strategy: not_null
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.xiaominfo.knife4j.demo.web
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+HohaiPan:
+  CaptchaConfig:
+    # 验证码类型 可选值: LineCaptcha | ShearCaptcha | CircleCaptcha
+    CaptchaType: CircleCaptcha
+    CaptchaWidth: 130
+    CaptchaHeight: 38
+    CodeCount: 5
+    LineCount: 10
+    CircleCount: 5
+    Thickness: 3
+  JwtConfig:
+    # 设置jwt签名加密时使用的秘钥
+    secretKey: hhu
+    # 设置jwt过期时间 单位毫秒
+    expireTime: 720000
+    # 设置前端传递过来的令牌名称
+    tokenName: Authorization
+  EmailCodeConfig:
+    # 设置邮箱验证码过期时间 单位秒
+    expireTime: 300  #修改该项请同步在模板文件中修改过期时间
+    # 设置发送的邮箱
+    sendEmail: 1203521235@qq.com
+    # 设置多少秒之内不能重复发送验证码 请注意千万不能超过邮箱的验证码过期时间 不然将无法正常使用邮箱功能!!!!
+    coolDownTime: 60
+    # 设置是否开启冷却功能
+    coolDownOpen: true
