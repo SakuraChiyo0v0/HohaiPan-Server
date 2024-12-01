@@ -9,10 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.hhu</groupId>
-	<artifactId>HohaiPan-Server</artifactId>
+	<artifactId>HohaiPan</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>HohaiPan-Server</name>
-	<description>HohaiPan-Server</description>
+	<packaging>pom</packaging>
+	<name>HohaiPan</name>
+	<description>HohaiPan</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -20,6 +21,11 @@
 	<developers>
 		<developer/>
 	</developers>
+	<modules>
+		<module>HohaiPan-Server</module>
+		<module>HohaiPan-POJO</module>
+		<module>HohaiPan-Common</module>
+	</modules>
 	<scm>
 		<connection/>
 		<developerConnection/>
@@ -28,6 +34,12 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<druid.version>1.2.13</druid.version>
+		<lombok.version>1.18.22</lombok.version>
+		<knife4j.version>3.0.3</knife4j.version>
+		<mybatis.version>3.0.3</mybatis.version>
+		<hutool-all.version>5.8.16</hutool-all.version>
+		<mysql.version>8.0.28</mysql.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -46,6 +58,44 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<!--lombok-->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+
+			<!--mybatis-->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+
+			<!--连接池-->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid-spring-boot-starter</artifactId>
+				<version>${druid.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>cn.hutool</groupId>
+				<artifactId>hutool-all</artifactId>
+				<version>${hutool-all.version}</version>
+			</dependency>
+
+			<!--mysql-->
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
