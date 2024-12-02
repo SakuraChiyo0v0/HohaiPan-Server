@@ -1,7 +1,7 @@
 package com.hhu.utils;
 
 import com.hhu.constant.MessageConstant;
-import com.hhu.exception.EmailSendException;
+import com.hhu.exception.EmailException;
 import com.hhu.properties.EmailCodeProperties;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +39,10 @@ public class HHUEmailUtils {
             helper.setTo(toEmail);
             helper.setFrom("HohaiPan" + '<' + "1203521235@QQ.com" + '>');
             javaMailSender.send(message);
-
-
+            log.info("邮件已成功发送到:{},邮件验证码为:{}",toEmail,emailCode);
         }catch(Exception e){
             log.error("发送邮件失败{}", e);
-            throw new EmailSendException(MessageConstant.EMAIL_SEND_FAILED);
+            throw new EmailException(MessageConstant.EMAIL_SEND_FAILED);
         }
 
     }

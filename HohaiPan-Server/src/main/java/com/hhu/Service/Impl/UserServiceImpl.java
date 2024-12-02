@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hhu.exception.AccountLockedException;
 import com.hhu.exception.NotFoundException;
 import com.hhu.hhu.entity.User;
+import com.hhu.hhu.enums.EmailCodeType;
 import com.hhu.hhu.vo.UserVO;
+import com.hhu.properties.EmailCodeProperties;
 import com.hhu.properties.JwtProperties;
 import com.hhu.result.Result;
 import com.hhu.service.IUserService;
@@ -17,6 +19,7 @@ import com.hhu.constant.UserStatusConstant;
 import com.hhu.exception.InvalidParamException;
 import com.hhu.hhu.dto.UserDTO;
 import com.hhu.mapper.UserMapper;
+import com.hhu.utils.HHUEmailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -37,6 +40,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private EmailCodeProperties emailCodeProperties;
+    @Autowired
+    private HHUEmailUtils hhuEmailUtils;
 
     @Override
     public Result<String> userLogin(UserDTO loginUserDTO) {
@@ -65,14 +72,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String tokenKey = LOGIN_TOKEN_KEY + token;
 
         UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
-        log.info("userVO:{}", userVO);
         Map<String, Object> map = BeanUtil.beanToMap(userVO, new HashMap<>(),
                 CopyOptions.create()
                         .setIgnoreNullValue(true)
                         .setFieldValueEditor((fieldName, fieldValue) -> fieldValue == null ? "" : fieldValue.toString()));
 
         stringRedisTemplate.opsForHash().putAll(tokenKey, map);
-        stringRedisTemplate.expire(tokenKey, jwtProperties.getExpireTime(), TimeUnit.MILLISECONDS);
+        stringRedisTemplate.expire(tokenKey, jwtProperties.getExpireTime(), TimeUnit.SECONDS);
         return Result.success(token);
+    }
+
+    @Override
+    public Result sendEmailCode(String email, Integer type) {
+        //获得验证码 存入redis
+        Integer emailCode = (int)((Math.random() * 9 + 1) * 100000);
+        String prefix = EmailCodeType.getPrefix(type);
+        String key = prefix + email;
+        stringRedisTemplate.opsForValue().set(key, String.valueOf(emailCode),
+                emailCodeProperties.getExpireTime(),TimeUnit.SECONDS);
+        hhuEmailUtils.sendEmail(email,emailCode,EmailCodeType.getSubject(type));
+        return Result.success();
     }
 }

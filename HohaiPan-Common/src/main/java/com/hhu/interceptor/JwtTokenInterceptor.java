@@ -60,7 +60,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             //将业务数据保存到TreadLocal中
             HHUThreadLocalUtil.set(entries);
             //刷新token有效期
-            stringRedisTemplate.expire(tokenKey,jwtProperties.getExpireTime(), TimeUnit.MILLISECONDS);
+            stringRedisTemplate.expire(tokenKey,jwtProperties.getExpireTime(), TimeUnit.SECONDS);
 
             Long userId = Long.valueOf(entries.get("userId").toString());
             log.info("用户{}触发Token拦截器",userId);

@@ -33,22 +33,25 @@ public  class HHUCaptchaUtils {
 
         String checkCode;
 
-        if(type.equals("ShearCaptcha")){
-            ShearCaptcha shearCaptcha = CaptchaUtil.createShearCaptcha(width, height, codeCount, captchaProperties.getThickness());
-            shearCaptcha.write(response.getOutputStream());
-            checkCode = shearCaptcha.getCode();
-        }else if(type.equals("CircleCaptcha")){
-            CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(width, height, codeCount, captchaProperties.getCircleCount());
-            circleCaptcha.write(response.getOutputStream());
-            checkCode = circleCaptcha.getCode();
-        }else{
-            //都不匹配时 则默认为LineCaptcha
-            LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(width, height, codeCount, captchaProperties.getLineCount());
-            lineCaptcha.write(response.getOutputStream());
-            checkCode = lineCaptcha.getCode();
+        try{
+            if(type.equals("ShearCaptcha")){
+                ShearCaptcha shearCaptcha = CaptchaUtil.createShearCaptcha(width, height, codeCount, captchaProperties.getThickness());
+                shearCaptcha.write(response.getOutputStream());
+                checkCode = shearCaptcha.getCode();
+            }else if(type.equals("CircleCaptcha")){
+                CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(width, height, codeCount, captchaProperties.getCircleCount());
+                circleCaptcha.write(response.getOutputStream());
+                checkCode = circleCaptcha.getCode();
+            }else{
+                //都不匹配时 则默认为LineCaptcha
+                LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(width, height, codeCount, captchaProperties.getLineCount());
+                lineCaptcha.write(response.getOutputStream());
+                checkCode = lineCaptcha.getCode();
+            }
+        }finally {
+            //关闭getOutputStream流
+            response.getOutputStream().close();
         }
-        //关闭getOutputStream流
-        response.getOutputStream().close();
         return checkCode;
     }
 }

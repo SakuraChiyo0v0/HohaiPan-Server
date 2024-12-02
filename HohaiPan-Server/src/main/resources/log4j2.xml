@@ -5,7 +5,7 @@
     <Properties>
         <!--变量定义-->
         <Property name="myPattern">%highlight{%d{HH:mm:ss.SSS} [%t] [%-4level] %logger{36} - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=blue}</Property>
-        <Property name="dir_url">logs</Property>
+        <Property name="dir_url">${sys:user.dir}/logs</Property>
     </Properties>
     <!--使用Appenders元素可以将日志事件数据写到各种目标位置-->
     <Appenders>
