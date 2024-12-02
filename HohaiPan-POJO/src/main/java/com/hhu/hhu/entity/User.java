@@ -1,5 +1,7 @@
 package com.hhu.hhu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("tb_user")
 public class User implements Serializable {
 
+    @TableId
     private Long userId; // 用户id
 
     private String userName; // 姓名
