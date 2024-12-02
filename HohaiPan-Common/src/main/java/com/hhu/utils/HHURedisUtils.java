@@ -1,67 +1,47 @@
 package com.hhu.utils;
 
+import cn.hutool.json.JSONUtil;
+import com.hhu.result.RedisData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Slf4j
 public class HHURedisUtils {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     /**
-     * 取
-     * @param key 键
-     * @return
+     * 将指定的键值对设置到Redis中，并指定过期时间
+     * @param key 键，用于标识存储在Redis中的值
+     * @param value 值，可以是任何对象，将被转换为JSON字符串存储
+     * @param time 过期时间，表示值在Redis中保存的时长
+     * @param unit 时间单位，用于解释time参数的时间粒度，例如秒、分钟等
      */
-    public Object get(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+    public void set(String key, Object value, Long time, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(value), time, unit);
     }
 
     /**
-     * 普通缓存放入
-     * @param key   键
-     * @param value 值
-     * @return true成功 false失败
+     * 使用逻辑过期时间将值存储到Redis中
+     * @param key Redis中存储数据的键
+     * @param value 要存储的值
+     * @param time 数据的过期时间长度
+     * @param unit 过期时间的单位
      */
-    public boolean set(String key, Object value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 指定缓存失效时间
-     * @param key  键
-     * @param time 时间(秒)
-     * @return
-     */
-    public boolean expire(String key, long time) {
-        try {
-            if (time > 0) {
-                redisTemplate.expire(key, time, TimeUnit.SECONDS);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 根据key 获取过期时间
-     * @param key 键 不能为null
-     * @return 时间(秒) 返回0代表为永久有效
-     */
-    public long getExpire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    public void setWithLogicalExpire(String key, Object value, Long time, TimeUnit unit) {
+        // 设置逻辑过期
+        RedisData redisData = new RedisData();
+        redisData.setData(value);
+        redisData.setExpireTime(LocalDateTime.now().plusSeconds(unit.toSeconds(time)));
+        // 写入Redis
+        redisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(redisData));
     }
 
 }

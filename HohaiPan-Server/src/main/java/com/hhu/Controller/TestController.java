@@ -10,12 +10,12 @@ public class TestController {
 
     @Autowired private IUserService userService;
 
-    @GetMapping("/1")
+    @GetMapping("/file/1")
     public String test01(){
         return "HelloWorld";
     }
 
-    @GetMapping("/2")
+    @GetMapping("/file/2")
     public String test02(){
         return userService.list().toString();
     }

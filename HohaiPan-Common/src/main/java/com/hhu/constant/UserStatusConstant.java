@@ -6,8 +6,8 @@ package com.hhu.constant;
 public class UserStatusConstant {
 
     //启用
-    public static final String ENABLE = "0";
+    public static final Character ENABLE = '0';
 
     //禁用
-    public static final String LOCKED = "2";
+    public static final Character LOCKED = '2';
 }

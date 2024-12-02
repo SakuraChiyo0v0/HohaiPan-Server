@@ -19,8 +19,6 @@ public class UserVO implements Serializable {
 
     private String email;
 
-    private String token;
-
     private String avatar;
 
 }

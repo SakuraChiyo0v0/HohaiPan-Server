@@ -63,6 +63,14 @@ spring:
             required: false
           #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
         debug: true
+# 日志
+logging:
+  charset:
+    file: UTF-8
+    console: UTF-8
+  config: classpath:log4j2.xml
+  file:
+    path: logs/test.log
 
 
 # MyBatis-plus配置
@@ -72,30 +80,13 @@ mybatis-plus:
   # 搜索指定包别名
   type-aliases-package: com.hhu.entity
   configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
     cache-enabled: false
   global-config:
     db-config:
       id-type:  assign_id
       update-strategy: not_null
-
-# springdoc-openapi项目配置
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
-  api-docs:
-    path: /v3/api-docs
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.xiaominfo.knife4j.demo.web
-# knife4j的增强配置，不需要增强可以不配
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn
 
 HohaiPan:
   CaptchaConfig:
