@@ -1,6 +1,4 @@
 package com.hhu.controller;
-
-import com.hhu.constant.CheckCodeConstant;
 import com.hhu.hhu.dto.UserDTO;
 import com.hhu.hhu.entity.User;
 import com.hhu.result.Result;
@@ -26,7 +24,7 @@ public class UserController {
             log.info("用户登录:{}",userDTO);
 
             User loginUser = userService.userLogin(userDTO);
-            return Result.success();
+            return Result.success(loginUser);
         }finally {
             httpSession.removeAttribute(CHECK_CODE_KEY);
         }

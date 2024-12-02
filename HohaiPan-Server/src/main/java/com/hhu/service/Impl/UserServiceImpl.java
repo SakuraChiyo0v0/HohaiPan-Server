@@ -3,14 +3,14 @@ package com.hhu.service.Impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hhu.constant.UserStatusConstant;
 import com.hhu.exception.AccountLockedException;
-import com.hhu.exception.InvalidParamException;
 import com.hhu.exception.NotFoundException;
-import com.hhu.hhu.dto.UserDTO;
 import com.hhu.hhu.entity.User;
-import com.hhu.mapper.UserMapper;
 import com.hhu.service.IUserService;
+import com.hhu.constant.UserStatusConstant;
+import com.hhu.exception.InvalidParamException;
+import com.hhu.hhu.dto.UserDTO;
+import com.hhu.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             //用户不存在(邮箱不存在)
             throw new NotFoundException(ACCOUNT_NOT_FOUND);
         }
-        if(user.getStatus().equals(UserStatusConstant.LOCKED)){
-            //用户被锁定
+        if(!user.getStatus().equals(UserStatusConstant.ENABLE)){
+            //用户非启用状态
             throw new AccountLockedException(ACCOUNT_LOCKED);
         }
         //进行MD5加密看是否相同
