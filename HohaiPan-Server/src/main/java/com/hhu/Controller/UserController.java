@@ -2,9 +2,8 @@ package com.hhu.controller;
 
 import com.hhu.exception.CheckCodeException;
 import com.hhu.exception.EmailException;
-import com.hhu.exception.InvalidParamException;
-import com.hhu.hhu.dto.UserDTO;
-import com.hhu.hhu.enums.CheckCodeType;
+import com.hhu.dto.UserDTO;
+import com.hhu.enums.CheckCodeType;
 import com.hhu.result.Result;
 import com.hhu.service.IUserService;
 import com.hhu.utils.HHUCaptchaUtils;
@@ -30,9 +29,6 @@ public class UserController {
     @Autowired
     private HHUCaptchaUtils hhuCaptchaUtils;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-
     @PostMapping("/login")
     public Result login(HttpSession httpSession, @RequestBody UserDTO userDTO) {
         log.info("用户请求登录:{}", userDTO);
@@ -49,13 +45,19 @@ public class UserController {
         return userService.userLogin(userDTO);
     }
 
+    @PostMapping("/emailLogin")
+    public Result emailLogin(@RequestBody UserDTO userDTO) {
+        log.info("用户请求邮箱登录:{}", userDTO);
+        return userService.emailLogin(userDTO);
+    }
+
     @PostMapping("/register")
     public Result register(HttpSession httpSession, @Valid @RequestBody UserDTO userDTO) {
         return Result.success();
     }
 
     @GetMapping("/checkCode")
-    public Result checkCode(HttpServletResponse response, HttpSession httpSession, @RequestParam Integer type) throws IOException {
+    public Result checkCode(HttpServletResponse response, HttpSession httpSession, @RequestParam(required = false, defaultValue = "1") Integer type) throws IOException {
         String checkCode = hhuCaptchaUtils.createCode(response);
         String key = CheckCodeType.getType(type);
         log.info("验证码类型:{} 验证码:{}", key, checkCode);
@@ -67,21 +69,23 @@ public class UserController {
     public Result sendEmailCode(HttpSession httpSession,
                                         @NotNull String email,
                                         @NotNull String checkCode,
-                                        @NotNull Integer type){
+                                        @NotNull Integer emailCodeType){
         try{
             log.info("邮箱请求验证码:{}", email);
 
-            String code = (String) httpSession.getAttribute(CheckCodeType.getType(4));
+            String code = (String) httpSession.getAttribute(CheckCodeType.getType(emailCodeType));
             if (checkCode == null) {
                 throw new EmailException("请先获取邮箱验证码");
             }
+            System.out.println(code);
+            System.out.println(checkCode);
             //验证码判断是否正确
             if (!checkCode.equals(code) && !"HHUNB".equals(checkCode)){
                 throw new CheckCodeException("验证码错误");
             }
-            return userService.sendEmailCode(email,type);
+            return userService.sendEmailCode(email,emailCodeType);
         }finally {
-            httpSession.removeAttribute(CheckCodeType.getType(4));
+            httpSession.removeAttribute(CheckCodeType.getType(emailCodeType));
         }
     }
 }

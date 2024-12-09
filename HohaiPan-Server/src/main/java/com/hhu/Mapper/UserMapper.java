@@ -1,7 +1,7 @@
 package com.hhu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hhu.hhu.entity.User;
+import com.hhu.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -11,7 +11,7 @@ public class MessageConstant {
     public static final String EMAIL_ALREADY_EXISTS = "邮箱已被使用";
     public static final String EMAIL_SEND_FAILED = "邮箱发送失败";
     public static final String EMAIL_SEND_COOL_DOWN = "请不要频繁发送请求!";
-    public static final String EMAIL_CODE_ERROR = "验证码错误";
+    public static final String EMAIL_CODE_ERROR = "邮箱验证码错误";
     public static final String FOLDER_NAME_EXISTS = "同一目录下,不能有重复名的文件夹";
 
     public static final String SAME_FILE_NAME = "新文件名不能与旧文件名相同";

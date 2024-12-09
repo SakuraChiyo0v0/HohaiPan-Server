@@ -1,4 +1,4 @@
-package com.hhu.hhu.entity;
+package com.hhu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

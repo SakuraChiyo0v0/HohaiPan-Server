@@ -1,4 +1,4 @@
-package com.hhu.hhu.vo;
+package com.hhu.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

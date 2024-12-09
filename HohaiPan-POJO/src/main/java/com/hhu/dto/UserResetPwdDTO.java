@@ -1,4 +1,4 @@
-package com.hhu.hhu.dto;
+package com.hhu.dto;
 
 import lombok.Data;
 

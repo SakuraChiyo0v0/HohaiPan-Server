@@ -1,4 +1,4 @@
-package com.hhu.hhu.enums;
+package com.hhu.enums;
 
 import lombok.Getter;
 
@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 public enum CheckCodeType {
 
-    Login(1,"checkCode:login"),
-    Register(2,"checkCode:register"),
-    ResetPwd(3,"checkCode:resetPwd"),
-    Email(4,"checkCode:email");
+    Login(0,"checkCode:login"),
+    Register(1,"checkCode:register"),
+    ResetPwd(2,"checkCode:resetPwd"),
+    Email(3,"checkCode:email");
 
     private final int code;
     private final String type;

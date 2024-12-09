@@ -8,16 +8,16 @@ import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hhu.exception.AccountLockedException;
 import com.hhu.exception.NotFoundException;
-import com.hhu.hhu.entity.User;
-import com.hhu.hhu.enums.EmailCodeType;
-import com.hhu.hhu.vo.UserVO;
+import com.hhu.entity.User;
+import com.hhu.enums.EmailCodeType;
+import com.hhu.vo.UserVO;
 import com.hhu.properties.EmailCodeProperties;
 import com.hhu.properties.JwtProperties;
 import com.hhu.result.Result;
 import com.hhu.service.IUserService;
 import com.hhu.constant.UserStatusConstant;
 import com.hhu.exception.InvalidParamException;
-import com.hhu.hhu.dto.UserDTO;
+import com.hhu.dto.UserDTO;
 import com.hhu.mapper.UserMapper;
 import com.hhu.utils.HHUEmailUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             //密码错误
             throw new InvalidParamException(PASSWORD_ERROR);
         }
-        log.info("用户登录成功");
+        return Result.success(loginSuccess(user));
+    }
+
+    @Override
+    public Result sendEmailCode(String email, Integer emailCodeType) {
+        //获得验证码 存入redis
+        Integer emailCode = (int)((Math.random() * 9 + 1) * 100000);
+        String prefix = EmailCodeType.getPrefix(emailCodeType);
+        String key = prefix + email;
+        stringRedisTemplate.opsForValue().set(key, String.valueOf(emailCode),
+                emailCodeProperties.getExpireTime(),TimeUnit.SECONDS);
+        hhuEmailUtils.sendEmail(email,emailCode,EmailCodeType.getSubject(emailCodeType));
+        return Result.success();
+    }
+
+    @Override
+    public Result emailLogin(UserDTO userDTO) {
+        String prefix = EmailCodeType.getPrefix(EmailCodeType.EmailLogin.getCode());
+        String key = prefix + userDTO.getEmail();
+        String emailCode = stringRedisTemplate.opsForValue().get(key);
+        if(!StrUtil.equals(emailCode,userDTO.getEmailCode())){
+            throw new InvalidParamException(EMAIL_CODE_ERROR);
+        }
+        //邮箱验证码通过 登陆成功 并删除redis的数据
+        User user = lambdaQuery().eq(User::getEmail, userDTO.getEmail()).one();
+        return Result.success(loginSuccess(user));
+    }
+
+    private String loginSuccess(User user){
         //登陆成功 发放jwt令牌
         String token = UUID.randomUUID().toString(true);
         String tokenKey = LOGIN_TOKEN_KEY + token;
@@ -79,18 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         stringRedisTemplate.opsForHash().putAll(tokenKey, map);
         stringRedisTemplate.expire(tokenKey, jwtProperties.getExpireTime(), TimeUnit.SECONDS);
-        return Result.success(token);
-    }
-
-    @Override
-    public Result sendEmailCode(String email, Integer type) {
-        //获得验证码 存入redis
-        Integer emailCode = (int)((Math.random() * 9 + 1) * 100000);
-        String prefix = EmailCodeType.getPrefix(type);
-        String key = prefix + email;
-        stringRedisTemplate.opsForValue().set(key, String.valueOf(emailCode),
-                emailCodeProperties.getExpireTime(),TimeUnit.SECONDS);
-        hhuEmailUtils.sendEmail(email,emailCode,EmailCodeType.getSubject(type));
-        return Result.success();
+        log.info("用户{}登录成功",user.getUserId());
+        return token;
     }
 }
