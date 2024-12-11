@@ -1,8 +1,10 @@
 package com.hhu.controller;
 
+import com.hhu.dto.UserDTO.UserEmailLoginDTO;
+import com.hhu.dto.UserDTO.UserLoginDTO;
+import com.hhu.dto.UserDTO.UserRegisterDTO;
 import com.hhu.exception.CheckCodeException;
 import com.hhu.exception.EmailException;
-import com.hhu.dto.UserDTO;
 import com.hhu.enums.CheckCodeType;
 import com.hhu.result.Result;
 import com.hhu.service.IUserService;
@@ -13,7 +15,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,34 +31,35 @@ public class UserController {
     private HHUCaptchaUtils hhuCaptchaUtils;
 
     @PostMapping("/login")
-    public Result login(HttpSession httpSession, @RequestBody UserDTO userDTO) {
-        log.info("用户请求登录:{}", userDTO);
+    public Result login(HttpSession httpSession, @RequestBody UserLoginDTO user) {
+        log.info("用户请求登录:{}", user);
 
-        String checkCode = (String) httpSession.getAttribute(CheckCodeType.getType(1));
+        String checkCode = (String) httpSession.getAttribute(CheckCodeType.Login.getType());
         if (checkCode == null) {
             throw new CheckCodeException("请先获取验证码");
         }
         //验证码判断是否正确
-        if (!checkCode.equals(userDTO.getCheckCode()) && !"HHUNB".equals(userDTO.getCheckCode())){
+        if (!checkCode.equals(user.getCheckCode()) && !"HHUNB".equals(user.getCheckCode())){
             throw new CheckCodeException("验证码错误");
         }
 
-        return userService.userLogin(userDTO);
+        return userService.userLogin(user);
     }
 
     @PostMapping("/emailLogin")
-    public Result emailLogin(@RequestBody UserDTO userDTO) {
-        log.info("用户请求邮箱登录:{}", userDTO);
-        return userService.emailLogin(userDTO);
+    public Result emailLogin(@RequestBody UserEmailLoginDTO user) {
+        log.info("用户请求邮箱登录:{}", user);
+        return userService.emailLogin(user);
     }
 
     @PostMapping("/register")
-    public Result register(HttpSession httpSession, @Valid @RequestBody UserDTO userDTO) {
+    public Result register(HttpSession httpSession, @Valid @RequestBody UserRegisterDTO user) {
+        log.info("用户请求注册:{}", user);
         return Result.success();
     }
 
     @GetMapping("/checkCode")
-    public Result checkCode(HttpServletResponse response, HttpSession httpSession, @RequestParam(required = false, defaultValue = "1") Integer type) throws IOException {
+    public Result checkCode(HttpServletResponse response, HttpSession httpSession, @RequestParam(required = false, defaultValue = "0") Integer type) throws IOException {
         String checkCode = hhuCaptchaUtils.createCode(response);
         String key = CheckCodeType.getType(type);
         log.info("验证码类型:{} 验证码:{}", key, checkCode);
@@ -75,7 +77,7 @@ public class UserController {
 
             String code = (String) httpSession.getAttribute(CheckCodeType.getType(emailCodeType));
             if (checkCode == null) {
-                throw new EmailException("请先获取邮箱验证码");
+                throw new EmailException("请先获取邮箱图形验证码");
             }
             System.out.println(code);
             System.out.println(checkCode);

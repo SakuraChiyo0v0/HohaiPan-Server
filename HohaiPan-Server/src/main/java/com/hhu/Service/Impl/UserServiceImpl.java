@@ -6,10 +6,13 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hhu.dto.UserDTO.UserEmailLoginDTO;
+import com.hhu.dto.UserDTO.UserLoginDTO;
 import com.hhu.exception.AccountLockedException;
 import com.hhu.exception.NotFoundException;
 import com.hhu.entity.User;
 import com.hhu.enums.EmailCodeType;
+import com.hhu.mapper.UserMapper;
 import com.hhu.vo.UserVO;
 import com.hhu.properties.EmailCodeProperties;
 import com.hhu.properties.JwtProperties;
@@ -17,8 +20,6 @@ import com.hhu.result.Result;
 import com.hhu.service.IUserService;
 import com.hhu.constant.UserStatusConstant;
 import com.hhu.exception.InvalidParamException;
-import com.hhu.dto.UserDTO;
-import com.hhu.mapper.UserMapper;
 import com.hhu.utils.HHUEmailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private HHUEmailUtils hhuEmailUtils;
 
     @Override
-    public Result<String> userLogin(UserDTO loginUserDTO) {
-        String email = loginUserDTO.getEmail();
+    public Result<String> userLogin(UserLoginDTO userDTO) {
+        String email = userDTO.getEmail();
         if (StrUtil.isEmpty(email)) {
             throw new InvalidParamException("邮箱不能为空");
         }
@@ -61,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new AccountLockedException(ACCOUNT_LOCKED);
         }
         //进行MD5加密看是否相同
-        String loginPassword = MD5.create().digestHex16(loginUserDTO.getPassword());
+        String loginPassword = MD5.create().digestHex16(userDTO.getPassword());
         if (!loginPassword.equals(user.getPassword())) {
             //密码错误
             throw new InvalidParamException(PASSWORD_ERROR);
@@ -82,7 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Result emailLogin(UserDTO userDTO) {
+    public Result emailLogin(UserEmailLoginDTO userDTO) {
         String prefix = EmailCodeType.getPrefix(EmailCodeType.EmailLogin.getCode());
         String key = prefix + userDTO.getEmail();
         String emailCode = stringRedisTemplate.opsForValue().get(key);
