@@ -89,6 +89,11 @@ mybatis-plus:
       update-strategy: not_null
 
 HohaiPan:
+  SystemConfig:
+    # 是否开启验证码 测试使用 上线切记要关闭
+    checkCodeOpen: false
+    # 通用验证码
+    universalCode: HHUNB
   CaptchaConfig:
     # 验证码类型 可选值: LineCaptcha | ShearCaptcha | CircleCaptcha
     CaptchaType: CircleCaptcha

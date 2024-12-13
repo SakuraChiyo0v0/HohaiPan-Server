@@ -1,5 +1,8 @@
 package com.hhu.dto.UserDTO;
 
+import com.hhu.annotation.EmailCheck;
+import com.hhu.annotation.PasswordCheck;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,18 +15,19 @@ import java.io.Serializable;
 public class UserResetPwdDTO implements Serializable {
 
     /** 用户邮箱 */
+    @EmailCheck
     private String email;
 
     /** 用户旧密码 */
+    @NotBlank(message = "旧密码不能为空")
     private String oldPassword;
 
     /** 用户新密码 */
+    @PasswordCheck
     private String password;
 
-    /** 验证码 */
-    private String checkCode;
-
     /** 邮箱验证码 */
+    @NotBlank(message = "邮箱验证码不能为空")
     private String emailCode;
 
     /** 是否登录标志 */

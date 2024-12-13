@@ -11,7 +11,7 @@ public enum CheckCodeType {
     Login(0,"checkCode:login"),
     Register(1,"checkCode:register"),
     ResetPwd(2,"checkCode:resetPwd"),
-    Email(3,"checkCode:email");
+    SendEmail(3,"checkCode:sendEmail");
 
     private final int code;
     private final String type;
