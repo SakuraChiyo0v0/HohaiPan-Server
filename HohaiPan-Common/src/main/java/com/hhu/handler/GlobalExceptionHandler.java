@@ -1,12 +1,17 @@
 package com.hhu.handler;
 
+import com.hhu.constant.ResultCodeConstant;
 import com.hhu.exception.BaseException;
 import com.hhu.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
@@ -26,6 +31,9 @@ public class GlobalExceptionHandler {
         return Result.error(ex.getMessage());
     }
 
+    /**
+     * 捕获参数校验异常
+     */
     @ExceptionHandler
     public Result validationExceptionHandler(MethodArgumentNotValidException ex){
         log.error("参数校验异常：{}", ex.getMessage());

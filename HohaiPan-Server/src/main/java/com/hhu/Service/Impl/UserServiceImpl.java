@@ -18,7 +18,6 @@ import com.hhu.exception.DatabaseException;
 import com.hhu.exception.UserAccountException;
 import com.hhu.mapper.UserMapper;
 import com.hhu.properties.SystemConfigProperties;
-import com.hhu.vo.UserVO;
 import com.hhu.properties.EmailCodeProperties;
 import com.hhu.properties.JwtProperties;
 import com.hhu.result.Result;
@@ -26,6 +25,7 @@ import com.hhu.service.IUserService;
 import com.hhu.constant.UserStatusConstant;
 import com.hhu.exception.InvalidParamException;
 import com.hhu.utils.HHUEmailUtils;
+import com.hhu.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -126,6 +126,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public Result getUserInfo(Long id) {
+        User user = getById(id);
+        if(user == null){
+            throw new UserAccountException(ACCOUNT_NOT_EXIST);
+        }
+        UserInfoVO userInfoVO = BeanUtil.toBean(user, UserInfoVO.class);
+        log.info("用户{}信息获取成功", userInfoVO);
+        return Result.success(userInfoVO);
+    }
+
+    @Override
     public Result sendEmailCode(String email, Integer emailCodeType) {
         //获得验证码 存入redis
         Integer emailCode = (int) ((Math.random() * 9 + 1) * 100000);
@@ -172,7 +183,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String token = UUID.randomUUID().toString(true);
         String tokenKey = LOGIN_TOKEN_KEY + token;
 
-        UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+        UserInfoVO userVO = BeanUtil.copyProperties(user, UserInfoVO.class);
         Map<String, Object> map = BeanUtil.beanToMap(userVO, new HashMap<>(),
                 CopyOptions.create()
                         .setIgnoreNullValue(true)

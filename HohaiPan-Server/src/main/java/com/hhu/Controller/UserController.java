@@ -83,6 +83,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/userinfo/{id}")
+    public Result getUserInfo(@NotNull @PathVariable Long id) {
+        log.info("获取用户信息id:{}", id);
+        return userService.getUserInfo(id);
+    }
+
     private void checkCode(HttpSession httpSession, String checkCode, Integer typeCode) {
         String settingCode = (String) httpSession.getAttribute(CheckCodeType.getType(typeCode));
         if (systemConfigProperties.isCheckCodeOpen()) {

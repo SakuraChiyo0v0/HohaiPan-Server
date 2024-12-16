@@ -19,7 +19,6 @@ public class UserResetPwdDTO implements Serializable {
     private String email;
 
     /** 用户旧密码 */
-    @NotBlank(message = "旧密码不能为空")
     private String oldPassword;
 
     /** 用户新密码 */

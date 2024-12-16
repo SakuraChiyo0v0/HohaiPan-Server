@@ -11,8 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVO implements Serializable {
-
+public class UserInfoVO implements Serializable {
     private Long userId;
 
     private String nickname;
@@ -20,5 +19,4 @@ public class UserVO implements Serializable {
     private String email;
 
     private String avatar;
-
 }
