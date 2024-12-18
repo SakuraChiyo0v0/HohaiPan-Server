@@ -1,19 +1,23 @@
 package com.hhu.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 import static com.hhu.constant.MessageConstant.UNKNOWN_ENUM_ERROR;
 
 @Getter
 public enum CategoryCodeType {
-    All(null, "all"),
+    All(0, "all"),
     Video(1, "video"),
     Music(2, "music"),
     Image(3, "image"),
     Doc(4, "doc"),
     Others(5, "others");
 
+    @EnumValue
     private final Integer typeCode;
+    @JsonValue
     private final String typeName;
 
     CategoryCodeType(Integer categoryCode, String type) {

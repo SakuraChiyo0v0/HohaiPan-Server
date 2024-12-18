@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.hhu.enums.CategoryCodeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class File implements Serializable {
     private String fileName;    // 文件名
     private String fileCover;   // 文件封面
     private String filePath;    // 文件路径
-    private Byte fileCategory;  // 文件分类
+    private CategoryCodeType fileCategory;  // 文件分类
     private Byte fileType;      // 文件类型
     private Byte status;        // 文件转码状态
     private LocalDateTime recoveryTime;  // 回收站时间
