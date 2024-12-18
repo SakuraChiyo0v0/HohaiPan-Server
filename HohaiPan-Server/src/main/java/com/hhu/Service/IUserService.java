@@ -20,4 +20,6 @@ public interface IUserService extends IService<User> {
     Result resetPwd(UserResetPwdDTO userDTO);
 
     Result register(@Valid UserRegisterDTO userDTO);
+
+    Result getUserInfo(Long id);
 }

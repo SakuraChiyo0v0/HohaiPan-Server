@@ -1,5 +1,6 @@
 package com.hhu.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.hhu.dto.UserDTO.UserEmailLoginDTO;
 import com.hhu.dto.UserDTO.UserLoginDTO;
 import com.hhu.dto.UserDTO.UserRegisterDTO;
@@ -10,6 +11,7 @@ import com.hhu.properties.SystemConfigProperties;
 import com.hhu.result.Result;
 import com.hhu.service.IUserService;
 import com.hhu.utils.HHUCaptchaUtils;
+import com.hhu.utils.HHUThreadLocalUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
+import java.util.Map;
 
 import static com.hhu.constant.MessageConstant.*;
 
@@ -59,6 +62,11 @@ public class UserController {
         log.info("用户请求重置密码:{}", userDTO);
         return userService.resetPwd(userDTO);
     }
+    @PutMapping("/logout")
+    public Result logout(){
+        //TODO 登出功能
+        return Result.success();
+    }
 
     @GetMapping("/checkCode")
     public Result checkCode(HttpServletResponse response, HttpSession httpSession, @RequestParam(required = false, defaultValue = "0") Integer type) throws IOException {
@@ -83,10 +91,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/userinfo/{id}")
-    public Result getUserInfo(@NotNull @PathVariable Long id) {
-        log.info("获取用户信息id:{}", id);
-        return userService.getUserInfo(id);
+    @GetMapping("/userInfo")
+    public Result getUserInfo() {
+        Map<Object, Object> entries = HHUThreadLocalUtil.get();
+        Long userId = Long.parseLong(entries.get("userId").toString());
+        log.info("用户:{}获取用户信息   ", userId);
+        return Result.success(userService.getUserInfo(userId));
     }
 
     private void checkCode(HttpSession httpSession, String checkCode, Integer typeCode) {

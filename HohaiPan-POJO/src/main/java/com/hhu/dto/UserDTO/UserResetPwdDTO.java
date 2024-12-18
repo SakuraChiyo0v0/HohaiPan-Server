@@ -26,9 +26,8 @@ public class UserResetPwdDTO implements Serializable {
     private String password;
 
     /** 邮箱验证码 */
-    @NotBlank(message = "邮箱验证码不能为空")
     private String emailCode;
 
-    /** 是否登录标志 */
+    /** 是否已经登录标志 */
     private Boolean isLogin;
 }

@@ -3,6 +3,8 @@ package com.hhu.enums;
 
 import lombok.Getter;
 
+import static com.hhu.constant.MessageConstant.UNKNOWN_ENUM_ERROR;
+
 @Getter
 public enum EmailCodeType {
     Register(1,"emailCode:register:","HohaiPan注册验证码"),
@@ -25,7 +27,7 @@ public enum EmailCodeType {
                 return value.getPrefix();
             }
         }
-        throw new RuntimeException("不支持的邮箱验证码类型");
+        throw new RuntimeException(UNKNOWN_ENUM_ERROR);
     }
 
     public static String getSubject(int code) {
@@ -34,7 +36,7 @@ public enum EmailCodeType {
                 return value.getSubject();
             }
         }
-        throw new RuntimeException("不支持的邮箱验证码类型");
+        throw new RuntimeException(UNKNOWN_ENUM_ERROR);
     }
 
 }

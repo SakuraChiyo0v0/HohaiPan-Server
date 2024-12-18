@@ -40,7 +40,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
         //判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
-            return true;
+            //return true;
         }
 
         try{
@@ -54,6 +54,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             String tokenKey = LOGIN_TOKEN_KEY + token;
 
             Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(tokenKey);
+            log.info("刷新token:{}",entries);
             if(entries.isEmpty()){
                 return true;
             }

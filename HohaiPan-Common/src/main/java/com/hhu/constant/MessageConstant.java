@@ -3,7 +3,9 @@ package com.hhu.constant;
 public class MessageConstant {
 
     public static final String UNKNOWN_ERROR = "发生未知错误,请联系管理员";
+    public static final String UNKNOWN_ENUM_ERROR = "未知枚举类型";
     public static final String UPDATE_ERROR = "更新数据失败,请重试或联系管理员";
+    public static final String USER_INTERFACE_PLEACE ="请使用用户界面";
 
     public static final String PASSWORD_ERROR = "密码错误";
     public static final String SAME_PASSWORD = "新密码不能和旧密码相同";

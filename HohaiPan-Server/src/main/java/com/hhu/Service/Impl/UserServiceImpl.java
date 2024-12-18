@@ -79,9 +79,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result resetPwd(UserResetPwdDTO userDTO) {
         String email = userDTO.getEmail();
         User user = validateUserByEmail(email);
-        CheckEmailCode(userDTO.getEmail(), userDTO.getEmailCode(), EmailCodeType.ResetPwd.getCode());
-        String oldPassword = user.getPassword();
-        String newPassword = MD5.create().digestHex16(userDTO.getPassword());
+        boolean isLogin = userDTO.getIsLogin();
+        String oldPassword= user.getPassword();;
+        String newPassword = MD5.create().digestHex16(userDTO.getPassword());;
+        if(!isLogin){
+            CheckEmailCode(userDTO.getEmail(), userDTO.getEmailCode(), EmailCodeType.ResetPwd.getCode());
+        }else{
+            if(!oldPassword.equals(MD5.create().digestHex16(userDTO.getOldPassword()))){
+                //旧密码与数据库中密码不同 密码错误
+                throw new InvalidParamException(PASSWORD_ERROR);
+            }
+        }
         if (newPassword.equals(oldPassword)) {
             //新密码与旧密码相同
             throw new InvalidParamException(SAME_PASSWORD);

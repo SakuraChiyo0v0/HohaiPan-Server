@@ -2,6 +2,8 @@ package com.hhu.enums;
 
 import lombok.Getter;
 
+import static com.hhu.constant.MessageConstant.UNKNOWN_ENUM_ERROR;
+
 /**
  * 验证码类型枚举
  */
@@ -27,6 +29,6 @@ public enum CheckCodeType {
                 return type.type;
             }
         }
-        throw new IllegalArgumentException("Unknown code: " + code);
+        throw new IllegalArgumentException(UNKNOWN_ENUM_ERROR);
     }
 }

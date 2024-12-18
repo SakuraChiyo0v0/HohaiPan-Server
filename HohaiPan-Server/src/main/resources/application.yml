@@ -107,7 +107,7 @@ HohaiPan:
     # 设置jwt签名加密时使用的秘钥
     secretKey: hhu
     # 设置jwt过期时间 单位毫秒
-    expireTime: 720000
+    expireTime: 7200
     # 设置前端传递过来的令牌名称
     tokenName: Authorization
   EmailCodeConfig:
