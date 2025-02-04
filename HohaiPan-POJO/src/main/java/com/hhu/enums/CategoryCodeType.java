@@ -8,7 +8,7 @@ import static com.hhu.constant.MessageConstant.UNKNOWN_ENUM_ERROR;
 
 @Getter
 public enum CategoryCodeType {
-    All(0, "all"),
+    All(null, "all"),
     Video(1, "video"),
     Music(2, "music"),
     Image(3, "image"),
@@ -34,10 +34,10 @@ public enum CategoryCodeType {
         throw new IllegalArgumentException(UNKNOWN_ENUM_ERROR);
     }
 
-    public static String getTypeCode(String typeName){
+    public static Integer getTypeCode(String typeName){
         for(CategoryCodeType type: CategoryCodeType.values()){
             if(type.typeName.equals(typeName)){
-                return String.valueOf(type.typeCode);
+                return type.typeCode;
             }
         }
         throw new IllegalArgumentException(UNKNOWN_ENUM_ERROR);

@@ -1,5 +1,7 @@
 package com.hhu.utils;
 
+import java.util.Map;
+
 /**
  * ThreadLocal 工具类
  */
@@ -14,7 +16,7 @@ public class HHUThreadLocalUtil {
     }
 	
     //存储键值对
-    public static void set(Object value){
+    public static void set(Map<Object, Object> value){
         THREAD_LOCAL.set(value);
     }
 
@@ -22,4 +24,16 @@ public class HHUThreadLocalUtil {
     public static void remove(){
         THREAD_LOCAL.remove();
     }
+
+    public static Long getUserId(){
+        Map<Object, Object> entries = (Map<Object, Object>) THREAD_LOCAL.get();
+        Long userId = Long.parseLong(entries.get("userId").toString());
+        return userId;
+    }
+
+    public static Map<Object, Object> getEntries(){
+        Map<Object, Object> entries = (Map<Object, Object>) THREAD_LOCAL.get();
+        return entries;
+    }
+
 }

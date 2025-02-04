@@ -2,9 +2,7 @@ package com.hhu.interceptor;
 
 
 import cn.hutool.core.util.StrUtil;
-import com.hhu.constant.RedisConstant;
 import com.hhu.properties.JwtProperties;
-import com.hhu.utils.HHUJwtUtils;
 import com.hhu.utils.HHUThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,14 +32,11 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private HHUJwtUtils hhuJwtUtils;
-
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //判断当前拦截到的是Controller的方法还是其他资源
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
-            //return true;
+            return true;
         }
 
         try{
@@ -54,10 +50,6 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             String tokenKey = LOGIN_TOKEN_KEY + token;
 
             Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries(tokenKey);
-            log.info("刷新token:{}",entries);
-            if(entries.isEmpty()){
-                return true;
-            }
             //将业务数据保存到TreadLocal中
             HHUThreadLocalUtil.set(entries);
             //刷新token有效期

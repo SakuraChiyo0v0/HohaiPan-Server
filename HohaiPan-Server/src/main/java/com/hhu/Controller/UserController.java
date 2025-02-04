@@ -93,8 +93,7 @@ public class UserController {
 
     @GetMapping("/userInfo")
     public Result getUserInfo() {
-        Map<Object, Object> entries = HHUThreadLocalUtil.get();
-        Long userId = Long.parseLong(entries.get("userId").toString());
+        Long userId = HHUThreadLocalUtil.getUserId();
         log.info("用户:{}获取用户信息   ", userId);
         return Result.success(userService.getUserInfo(userId));
     }
