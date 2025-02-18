@@ -98,6 +98,11 @@ public class UserController {
         return Result.success(userService.getUserInfo(userId));
     }
 
+    @PutMapping("/updateAvatar")
+    public Result updateUserAvatar(@RequestBody Long userId,String avatarURL){
+        return userService.updateUserAvatar(userId,avatarURL);
+    }
+
     private void checkCode(HttpSession httpSession, String checkCode, Integer typeCode) {
         String settingCode = (String) httpSession.getAttribute(CheckCodeType.getType(typeCode));
         if (systemConfigProperties.isCheckCodeOpen()) {
@@ -111,4 +116,6 @@ public class UserController {
             }
         }
     }
+
+
 }

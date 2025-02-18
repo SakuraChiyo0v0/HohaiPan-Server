@@ -19,4 +19,8 @@ public class UserInfoVO implements Serializable {
     private String email;
 
     private String avatar;
+
+    private String usedSpace;
+
+    private String totalSpace;
 }

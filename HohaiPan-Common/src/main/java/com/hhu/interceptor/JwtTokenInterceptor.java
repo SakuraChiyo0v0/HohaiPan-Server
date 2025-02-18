@@ -59,6 +59,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             log.info("用户{}触发Token拦截器",userId);
             return true;
         }catch(Exception ex){
+            log.error("token校验失败");
             //不通过，响应401状态码
             response.setStatus(401);
             return false;

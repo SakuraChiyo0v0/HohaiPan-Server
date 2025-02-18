@@ -22,4 +22,6 @@ public interface IUserService extends IService<User> {
     Result register(@Valid UserRegisterDTO userDTO);
 
     Result getUserInfo(Long id);
+
+    Result updateUserAvatar(Long userId,String avatarURL);
 }

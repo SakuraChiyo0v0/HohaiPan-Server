@@ -1,5 +1,9 @@
 package com.hhu.config;
 
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -8,6 +12,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@Slf4j
 public class RedisConfig {
 
     @Bean
@@ -25,5 +30,16 @@ public class RedisConfig {
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
     }
+
+    @Bean
+    public RedissonClient redissonClient() {
+        // 如果有密码则填写
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://localhost:6379");
+        log.info("redisson连接成功");
+        return Redisson.create(config);
+    }
+
 }
 

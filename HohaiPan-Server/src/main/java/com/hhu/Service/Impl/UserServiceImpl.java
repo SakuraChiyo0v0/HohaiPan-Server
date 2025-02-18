@@ -156,6 +156,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return Result.success();
     }
 
+    @Override
+    public Result updateUserAvatar(Long userId, String avatar){
+        log.info("用户{}更新头像{}", userId,avatar);
+        lambdaUpdate().eq(User::getUserId, userId)
+                .set(User::getAvatar, avatar)
+                .update();
+        return Result.success();
+    }
+
     private void CheckEmailCode(String email, String emailCode, Integer emailCodeType) {
         String prefix = EmailCodeType.getPrefix(emailCodeType);
         String key = prefix + email;

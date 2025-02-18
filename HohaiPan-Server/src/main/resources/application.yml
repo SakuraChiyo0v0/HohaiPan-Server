@@ -2,6 +2,11 @@ server:
   port: 8080
 
 spring:
+  servlet:
+    multipart:
+      # 文件上传最大值
+      max-file-size: 100MB
+      max-request-size: 200MB
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -89,6 +94,12 @@ mybatis-plus:
       update-strategy: not_null
 
 HohaiPan:
+  # 系统配置
+  StoragePath:
+    # 文件上传路径
+    filePath: D:\\HohaiPanFile\\file\\
+    # 图片上传路径
+    avatarPath: D:\\HohaiPanFile\\avatar\\
   SystemConfig:
     # 是否开启验证码 测试使用 上线切记要关闭
     checkCodeOpen: false

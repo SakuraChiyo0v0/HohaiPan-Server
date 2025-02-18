@@ -54,4 +54,8 @@ public class User implements Serializable {
 
     private String remark; // 备注
 
+    private String usedSpace;
+
+    private String totalSpace;
+
 }
