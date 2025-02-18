@@ -1,5 +1,6 @@
 package com.hhu.enums;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public enum CategoryCodeType {
         this.typeName = type;
     }
 
-    public static String getTypeName(int code) {
+    public static String getTypeName(Integer code) {
         for(CategoryCodeType type: CategoryCodeType.values()){
             if(type.typeCode == code){
                 return type.typeName;
@@ -35,6 +36,9 @@ public enum CategoryCodeType {
     }
 
     public static Integer getTypeCode(String typeName){
+        if (StrUtil.isBlank(typeName)){
+            return null;
+        }
         for(CategoryCodeType type: CategoryCodeType.values()){
             if(type.typeName.equals(typeName)){
                 return type.typeCode;

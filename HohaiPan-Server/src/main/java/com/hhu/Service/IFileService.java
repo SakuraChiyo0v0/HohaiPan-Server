@@ -7,4 +7,5 @@ import com.hhu.result.PageBean;
 
 public interface IFileService extends IService<File> {
     PageBean getFileList(FileListDTO fileListDTO);
+
 }

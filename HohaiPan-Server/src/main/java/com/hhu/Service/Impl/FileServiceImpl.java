@@ -13,6 +13,7 @@ import com.hhu.service.IFileService;
 import com.hhu.utils.HHUThreadLocalUtil;
 import com.hhu.vo.FileVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,10 @@ import java.util.List;
 @Service
 @Slf4j
 public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements IFileService {
+
+    @Autowired
+    private FileMapper fileMapper;
+
     @Override
     public PageBean getFileList(FileListDTO fileListDTO) {
         String filePid = fileListDTO.getFilePid();

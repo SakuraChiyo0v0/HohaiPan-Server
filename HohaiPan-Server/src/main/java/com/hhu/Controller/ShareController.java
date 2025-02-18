@@ -22,7 +22,7 @@ public class ShareController {
     }
 
     @PutMapping("/generate")
-    public Result generateShareCode(@RequestBody String fileId){
+    public Result generateShareCode(String fileId){
         log.info("生成分享文件:{}",fileId);
         return shareService.generateShareCode(fileId);
     }

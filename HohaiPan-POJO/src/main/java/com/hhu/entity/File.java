@@ -1,9 +1,6 @@
 package com.hhu.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import com.hhu.enums.CategoryCodeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
