@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hhu.dto.FileDTO.FileShareDTO;
 import com.hhu.entity.File;
 import com.hhu.entity.Share;
 import com.hhu.mapper.ShareMapper;
@@ -12,6 +13,7 @@ import com.hhu.service.IFileService;
 import com.hhu.service.IShareService;
 import com.hhu.utils.HHUPartitionedBloomFilter;
 import com.hhu.utils.HHUThreadLocalUtil;
+import com.hhu.vo.FileShareVO;
 import com.hhu.vo.FileVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -47,13 +50,13 @@ public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements
             return Result.error("分享码不存在");
         }
 
-        File file = shareMapper.getFileByShareCode(shareCode);
+        FileShareDTO file = shareMapper.getFileByShareCode(shareCode);
         log.info("获得分享文件:{}", file);
         if(file == null){
             return Result.error("分享文件不存在或已删除");
         }
         //转换为VO
-        FileVO fileVO = BeanUtil.copyProperties(file, FileVO.class);
+        FileShareVO fileVO = BeanUtil.copyProperties(file, FileShareVO.class);
         return Result.success(fileVO);
     }
 
@@ -68,11 +71,12 @@ public class ShareServiceImpl extends ServiceImpl<ShareMapper, Share> implements
             return Result.error("生成分享码失败");
         }
         //构建 share 对象
-        Long userId = HHUThreadLocalUtil.getUserId();
+        Map<Object, Object> entries = HHUThreadLocalUtil.getEntries();
         Share share = new Share().builder()
                 .shareCode(shareCode)
                 .fileId(fileId)
-                .userId(userId)
+                .userId(Long.parseLong(entries.get("userId").toString()))
+                .nickname(entries.get("nickname").toString())
                 .shareTime(LocalDateTime.now())
                 .expireTime(LocalDate.now().plusDays(7))
                 .build();

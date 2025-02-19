@@ -1,10 +1,7 @@
 package com.hhu.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hhu.dto.UserDTO.UserEmailLoginDTO;
-import com.hhu.dto.UserDTO.UserLoginDTO;
-import com.hhu.dto.UserDTO.UserRegisterDTO;
-import com.hhu.dto.UserDTO.UserResetPwdDTO;
+import com.hhu.dto.UserDTO.*;
 import com.hhu.entity.User;
 import com.hhu.result.Result;
 import jakarta.validation.Valid;
@@ -23,5 +20,5 @@ public interface IUserService extends IService<User> {
 
     Result getUserInfo(Long id);
 
-    Result updateUserAvatar(Long userId,String avatarURL);
+    Result updateUserAvatar(UserAvatarUpdateDTO userAvatarUpdateDTO);
 }

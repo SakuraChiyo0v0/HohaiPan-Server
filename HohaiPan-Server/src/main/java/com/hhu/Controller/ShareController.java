@@ -21,7 +21,7 @@ public class ShareController {
         return shareService.getShareFile(shareCode);
     }
 
-    @PutMapping("/generate")
+    @PostMapping("/generate")
     public Result generateShareCode(String fileId){
         log.info("生成分享文件:{}",fileId);
         return shareService.generateShareCode(fileId);

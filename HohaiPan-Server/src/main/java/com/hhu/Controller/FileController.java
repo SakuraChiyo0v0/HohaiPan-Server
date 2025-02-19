@@ -42,6 +42,24 @@ public class FileController {
         return Result.success(fileList);
     }
 
+    @PutMapping("/rename")
+    public Result rename(@RequestParam String fileId, @RequestParam String newName){
+        return fileService.rename(fileId,newName);
+    }
+
+
+    @DeleteMapping("/delete/{fileIds}")
+    public Result delete(@PathVariable String fileIds){
+        String[] fileIdList = fileIds.split(",");
+        return fileService.deleteFile(fileIdList);
+    }
+
+    @PostMapping("/createFolder")
+    public Result createFolder(@RequestParam String filePid,@RequestParam String fileName){
+        return fileService.createFolder(filePid,fileName);
+    }
+
+
     @PostMapping("/avatar/upload")
     public Result avatarUpload(MultipartFile file) throws Exception {
         UUID uuid = UUID.randomUUID();

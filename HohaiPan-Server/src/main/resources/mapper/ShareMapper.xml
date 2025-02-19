@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhu.mapper.ShareMapper">
-    <select id="getFileByShareCode" resultType="com.hhu.entity.File">
-        SELECT f.* FROM tb_file f
+    <select id="getFileByShareCode" resultType="com.hhu.dto.FileDTO.FileShareDTO">
+        SELECT * FROM tb_file f
                             JOIN tb_share s on f.file_id = s.file_id
         WHERE s.share_code = #{shareCode}
           AND s.expire_time > NOW()

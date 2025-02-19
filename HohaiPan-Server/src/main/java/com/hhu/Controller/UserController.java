@@ -1,10 +1,7 @@
 package com.hhu.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.hhu.dto.UserDTO.UserEmailLoginDTO;
-import com.hhu.dto.UserDTO.UserLoginDTO;
-import com.hhu.dto.UserDTO.UserRegisterDTO;
-import com.hhu.dto.UserDTO.UserResetPwdDTO;
+import com.hhu.dto.UserDTO.*;
 import com.hhu.exception.CheckCodeException;
 import com.hhu.enums.CheckCodeType;
 import com.hhu.properties.SystemConfigProperties;
@@ -99,8 +96,8 @@ public class UserController {
     }
 
     @PutMapping("/updateAvatar")
-    public Result updateUserAvatar(@RequestBody Long userId,String avatarURL){
-        return userService.updateUserAvatar(userId,avatarURL);
+    public Result updateUserAvatar(@RequestBody UserAvatarUpdateDTO userAvatarUpdateDTO){
+        return userService.updateUserAvatar(userAvatarUpdateDTO);
     }
 
     private void checkCode(HttpSession httpSession, String checkCode, Integer typeCode) {

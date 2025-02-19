@@ -23,6 +23,7 @@ public class Share implements Serializable {
     private String shareCode;     // 分享码
     private String fileId;        // 关联文件id
     private Long userId;          // 关联用户id
+    private String nickname;        //用户名 冗余字段
     private LocalDateTime shareTime;       // 分享时间
     private LocalDate expireTime;      // 截至日期
     private Integer useCount;     // 使用次数

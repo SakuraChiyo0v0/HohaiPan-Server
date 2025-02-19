@@ -8,10 +8,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hhu.dto.UserDTO.UserEmailLoginDTO;
-import com.hhu.dto.UserDTO.UserLoginDTO;
-import com.hhu.dto.UserDTO.UserRegisterDTO;
-import com.hhu.dto.UserDTO.UserResetPwdDTO;
+import com.hhu.dto.UserDTO.*;
 import com.hhu.entity.User;
 import com.hhu.enums.EmailCodeType;
 import com.hhu.exception.DatabaseException;
@@ -157,7 +154,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Result updateUserAvatar(Long userId, String avatar){
+    public Result updateUserAvatar(UserAvatarUpdateDTO userAvatarUpdateDTO){
+        Long userId = userAvatarUpdateDTO.getUserId();
+        String avatar = userAvatarUpdateDTO.getAvatarURL();
         log.info("用户{}更新头像{}", userId,avatar);
         lambdaUpdate().eq(User::getUserId, userId)
                 .set(User::getAvatar, avatar)
